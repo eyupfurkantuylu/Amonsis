@@ -1,0 +1,124 @@
+﻿@model ReadUserDto
+@{
+    ViewData["Title"] = "Kullanıcı Güncelle";
+    ViewData["Page"] = "Kullanıcılar";
+}
+
+
+<div class="container">
+
+    <h3> kullanıcısını güncellemektesiniz. </h3>
+
+    <div class="form-group row">
+        <label for="ID" class="col-sm-2 col-form-label">Kullanıcı ID:</label>
+        <div class="col-sm-10">
+
+            <input type="text" class="form-control-plaintext fw-bold" id="ID" name="ID" value="@Model.ID">
+
+        </div>
+
+    </div>
+    <div class="form-group row">
+        <label for="Name" class="col-sm-2 col-form-label">Adı:</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name">
+        </div>
+    </div>
+    <br />
+    <div class="form-group row">
+        <label for="Surname" class="col-sm-2 col-form-label">Soyadı:</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="Surname" name="Surname" value="@Model.Surname">
+        </div>
+    </div>
+    <br />
+    <div class="form-group row">
+        <label for="Location" class="col-sm-2 col-form-label">Yaşadığı Yer:</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="Location" name="Location" value="@Model.Location">
+        </div>
+    </div>
+    <br />
+    <div class="form-group row">
+        <label for="BirthDate" class="col-sm-2 col-form-label">Doğum Tarihi:</label>
+        <div class="col-sm-10">
+            <input type="datetime" class="form-control" id="BirthDate" name="BirthDate" value="@Model.BirthDate.ToString("yyyy-MM-dd")">
+        </div>
+    </div>
+    <br />
+    <div class="form-group row">
+        <label for="CreaDate" class="col-sm-2 col-form-label">Kayıt Tarihi:</label>
+        <div class="col-sm-10">
+            @Model.CreaDate.ToString("dd-MM-yyyy' Saat:'HH:mm")
+        </div>
+    </div>
+
+    <button id="UpdateFormButton" class="btn btn-success"> Güncelle </button>
+    <button id="BackButton" class="btn btn-warning"> Geri </button>
+
+
+</div>
+
+
+<script>
+
+    $('#UpdateFormButton').click(function (event) {
+        event.preventDefault(); // Sayfayı yeninden yüklememek için
+
+        var id = @(Model.ID);
+        var Name = $('#Name').val();
+        var Surname = $('#Surname').val();
+        var Location = $('#Location').val();
+        var birthDate = $('#BirthDate').val().toString();
+        var creaDate = '@Model.CreaDate'.toString('yyyy-MM-dd HH:mm:ss')
+
+        console.log(birthDate);
+        console.log(typeof birthDate);
+        console.log(creaDate);
+        console.log(typeof creaDate);
+
+        $.ajax({
+            type: "POST",
+            url: "/User/Edit",
+            data: {
+                ID: id,
+                Name: Name,
+                Surname: Surname,
+                Location: Location,
+                BirthDate: birthDate,
+                CreaDate: creaDate
+            },
+            success: function (result) {
+
+                if (result != null) {
+                    Swal.fire({
+                        title: 'Başarılı',
+                        text: 'Güncelleme İşlemi başarılı.',
+                        icon: 'success',
+                    }).then(function () {
+                        // Kullanıcı OK butonuna bastığında /User/Index sayfasına yönlendirme yaptık
+                        window.location.href = '/User/Index';
+                    });
+
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Hata ayrıntıları:", {
+                    jqXHR: jqXHR,
+                    textStatus: textStatus,
+                    errorThrown: errorThrown
+                });
+
+                Swal.fire({
+                    title: 'Hata',
+                    text: 'Bir hata meydana geldi.',
+                    icon: 'error',
+                });
+            }
+        })
+    })
+    $('#BackButton').click(function (event) {
+        window.location.href = '/User/Index';
+    });
+
+</script>

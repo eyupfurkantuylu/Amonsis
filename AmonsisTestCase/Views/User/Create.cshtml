@@ -1,0 +1,99 @@
+﻿@{
+    ViewData["Title"] = "Kullanıcı Oluştur";
+    ViewData["Page"] = "Kullanıcılar";
+}
+
+
+<div class="container">
+
+    <h3> Yeni Kullanıcı Oluştur </h3>
+
+
+    <div class="form-group row">
+        <label for="Name" class="col-sm-2 col-form-label">Adı:</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="Name" name="Name" value="">
+        </div>
+    </div>
+    <br />
+    <div class="form-group row">
+        <label for="Surname" class="col-sm-2 col-form-label">Soyadı:</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="Surname" name="Surname" value="">
+        </div>
+    </div>
+    <br />
+    <div class="form-group row">
+        <label for="Location" class="col-sm-2 col-form-label">Yaşadığı Yer:</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="Location" name="Location" value="">
+        </div>
+    </div>
+    <br />
+    <div class="form-group row">
+        <label for="BirthDate" class="col-sm-2 col-form-label">Doğum Tarihi:</label>
+        <div class="col-sm-10">
+            <input type="date" class="form-control" id="BirthDate" name="BirthDate" value="">
+        </div>
+    </div>
+    <br />
+
+    <button id="AddFormButton" class="btn btn-success"> Kaydet </button>
+    <button id="BackButton" class="btn btn-warning"> Geri </button>
+
+
+</div>
+
+
+<script>
+
+    $('#AddFormButton').click(function (event) {
+        event.preventDefault(); // Sayfayı yeninden yüklememek için
+
+        var Name = $('#Name').val();
+        var Surname = $('#Surname').val();
+        var Location = $('#Location').val();
+        var birthDate = $('#BirthDate').val().toString();
+
+        console.log(birthDate);
+
+        $.ajax({
+            type: "POST",
+            url: "/User/Create",
+            data: {
+                Name: Name,
+                Surname: Surname,
+                Location: Location,
+                BirthDate: birthDate
+            },
+            success: function (result) {
+                Swal.fire({
+                    title: 'Başarılı',
+                    text: 'Yeni Kullanıcı Oluşturuldu.',
+                    icon: 'success',
+                }).then(function () {
+                    // Kullanıcı OK butonuna bastığında /User/Index sayfasına yönlendirme yaptık
+                    window.location.href = '/User/Index';
+                });
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Hata ayrıntıları:", {
+                    jqXHR: jqXHR,
+                    textStatus: textStatus,
+                    errorThrown: errorThrown
+                });
+
+                Swal.fire({
+                    title: 'Hata',
+                    text: 'Bir hata meydana geldi.',
+                    icon: 'error',
+                });
+            }
+        })
+    })
+    $('#BackButton').click(function (event) {
+        window.location.href = '/User/Index';
+    });
+
+</script>

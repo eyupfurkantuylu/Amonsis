@@ -1,0 +1,15 @@
+﻿@model List<AllUserCountDto>
+
+@foreach(var item in Model)
+{
+    <div class="col-md-4 col-xl-4">
+        <div class="card bg-c-blue order-card">
+            <div class="card-block">
+                <h6 class="m-b-20">Tüm Kullanıcılar</h6>
+                <h2 class="text-right"><i class="fa fa-user"></i><span>@item.TotalRecords</span></h2>
+                <p class="m-b-0">Tüm kullanıcıların sayısını verir.</p>
+            </div>
+        </div>
+    </div>
+}
+

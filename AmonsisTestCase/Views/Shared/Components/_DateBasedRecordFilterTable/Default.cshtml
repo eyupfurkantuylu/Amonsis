@@ -1,0 +1,84 @@
+﻿@model List<ReadUserDto>
+
+
+<h2> Kayıt Tarihine Göre Filtreleme </h2>
+<b>2.2 Kayıt tarihine göre kayıtların süzülebildiği rapor.</b>
+<div class="container my-3">
+    
+    <input type="date" id="startDate" placeholder="Başlangıç Tarihi">
+    <input type="date" id="endDate" placeholder="Bitiş Tarihi">
+    <button class="btn btn-warning" id="filterButton">Filtrele</button>
+</div>
+
+
+<table id="DateBasedRecordFilterTbl" class="table table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Ad</th>
+            <th>Soyad</th>
+            <th>Doğum Tarihi</th>
+            <th>Şehir</th>
+            <th>Oluşturma Tarihi</th>
+ 
+        </tr>
+    </thead>
+    <tbody>
+
+
+        
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.ID</td>
+                    <td>@user.Name</td>
+                    <td>@user.Surname</td>
+                    <td>@user.BirthDate.ToString("dd.MM.yyyy")</td>
+                    <td>@user.Location</td>
+                    <td>@user.CreaDate.ToString("dd.MM.yyyy")</td>
+                
+
+                </tr>
+            }
+        
+    </tbody>
+</table>
+
+
+<script>
+
+    $(document).ready(function () {
+        $('#DateBasedRecordFilterTbl').DataTable({
+            language: {
+                emptyTable: "Data yok",
+                searching: true,
+                paging: true,
+                info: true,
+
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        $('#filterButton').click(function () {
+            var startDate = new Date($('#startDate').val());
+            var endDate = new Date($('#endDate').val());
+
+            $('#DateBasedRecordFilterTbl tbody tr').each(function () {
+                var createDateText = $(this).find('td').eq(5).text();
+                var createDateParts = createDateText.split('.');
+                var createDate = new Date(createDateParts[2], createDateParts[1] - 1, createDateParts[0]);
+
+                if (createDate >= startDate && createDate <= endDate) {
+                    $(this).show(); // Satırı göster
+                } else {
+                    $(this).hide(); // Satırı gizle
+                }
+            });
+        });
+    });
+
+
+
+</script>
+

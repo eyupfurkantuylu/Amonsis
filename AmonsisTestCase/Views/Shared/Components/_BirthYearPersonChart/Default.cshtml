@@ -1,0 +1,56 @@
+﻿@using Newtonsoft.Json
+@model List<BirthYearPersonCountDto>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    // Google Charts'ı yükleyin
+    google.charts.load('current', {
+        packages: ['corechart']
+    });
+    var data = [];
+    // Dapper'dan alınan verileri JSON formatında JavaScript değişkenine atayın
+    data = @Html.Raw(JsonConvert.SerializeObject(Model));
+    console.log(data)
+    // Google Charts'ı yüklediğinde grafiği çiz
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        // Google Charts veri tablosunu oluşturun
+        var dataTable = new google.visualization.DataTable();
+        dataTable.addColumn('string', 'Doğum Yılı');
+        dataTable.addColumn('number', 'Kişi Sayısı');
+
+        // Model'den gelen verileri data tablosuna ekleyin
+        data.forEach(function (item) {
+            console.log(item["BirthYear"] + " - " + item["PersonCount"]);
+            dataTable.addRow([String(item["BirthYear"]), item["PersonCount"]]);
+        });
+
+        // Grafiği oluşturun ve ayarlayın
+        var options = {
+            title: 'Doğum Yılına Göre Kişi Sayısı',
+            hAxis: {
+                title: 'Doğum Yılı'
+            },
+            vAxis: {
+                title: 'Kişi Sayısı'
+            },
+            legend: {
+                position: 'none'
+            }
+        };
+
+        // Grafiği gösterin
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        chart.draw(dataTable, options);
+    }
+</script>
+
+<div class="col-md-4 col-xl-4">
+    <div class="card bg-c-green order-card">
+        <div class="card-block">
+            <h6 class="m-b-20">Doğum Yılına Göre Kişi Sayısı </h6>
+            <b>2.1 Doğum Yılına Göre Kaç Kişi var</b>
+            <div id="chart_div" style=""></div>
+        </div>
+    </div>
+</div>

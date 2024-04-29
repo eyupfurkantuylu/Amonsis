@@ -1,0 +1,57 @@
+﻿@model List<ReadUserDto>
+
+
+<h2> Tüm Kayıtlar </h2>
+<b>2.3 Tüm Kayıtlar</b>
+<table id="AllUsers" class="table table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Ad</th>
+            <th>Soyad</th>
+            <th>Doğum Tarihi</th>
+            <th>Şehir</th>
+            <th>Oluşturma Tarihi</th>
+     
+        </tr>
+    </thead>
+    <tbody>
+
+
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.ID</td>
+                    <td>@user.Name</td>
+                    <td>@user.Surname</td>
+                    <td>@user.BirthDate.ToString("dd.MM.yyyy")</td>
+                    <td>@user.Location</td>
+                    <td>@user.CreaDate.ToString("dd.MM.yyyy")</td>
+                   
+
+                </tr>
+            }
+        
+    </tbody>
+</table>
+
+
+<script>
+
+    $(document).ready(function () {
+        $('#AllUsers').DataTable({
+            language: {
+                emptyTable: "Data yok",
+                searching: true,
+                paging: true,
+                info: true,
+
+            }
+        });
+    });
+
+ 
+
+
+</script>
+
